@@ -1,1 +1,982 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Tradução em Francês</title>
+    <style>
+        /* Reset e estilos gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Página inicial */
+        #intro-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('fundo.jpg') no-repeat center center;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #intro-video {
+            max-width: 80%;
+            max-height: 80%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Página 02 - Tela inicial do quiz */
+        #home-page {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #F1E1AC;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #mascot-neutro {
+            max-width: 300px;
+            margin-bottom: 30px;
+        }
+
+        #start-button {
+            background-color: #002F6C;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 40px;
+            font-family: 'Franklin Gothic Demi', Arial, sans-serif;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        #start-button:hover {
+            transform: scale(1.05);
+            background-color: #004494;
+        }
+
+        #difficulty-buttons {
+            display: none;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .difficulty-btn {
+            background-color: #002F6C;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-family: 'Franklin Gothic Demi', Arial, sans-serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .difficulty-btn:hover {
+            transform: scale(1.05);
+            background-color: #004494;
+        }
+
+        /* Quiz Container */
+        .quiz-container {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #F1E1AC;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            max-width: 150px;
+        }
+
+        .main-square {
+            background-color: #002F6C;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .mascote {
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            max-width: 120px;
+        }
+
+        .enunciado {
+            background-color: #C8102E;
+            border-radius: 50px;
+            padding: 15px 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .enunciado-text {
+            font-family: 'Rockwell', serif;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .question-text {
+            font-family: 'Rockwell', serif;
+            color: white;
+            font-size: 1.7rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .audio-btn {
+            background-color: #F4F1EC;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .audio-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            background-color: #F4F1EC;
+            border: none;
+            border-radius: 50px;
+            padding: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .option:hover {
+            background-color: #e0ddd8;
+        }
+
+        .option.correct {
+            background-color: #3B8C59;
+            color: white;
+        }
+
+        .option.incorrect {
+            background-color: #C8102E;
+            color: white;
+        }
+
+        .check-button {
+            background-color: #3B8C59;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto 20px;
+            transition: background-color 0.2s;
+        }
+
+        .check-button:hover {
+            background-color: #2a6b41;
+        }
+
+        .feedback {
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 40px;
+        }
+
+        .feedback-text {
+            font-family: 'Cooper Black', serif;
+            font-size: 1.5rem;
+        }
+
+        .correct-answer {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            color: white;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .nav-button {
+            border: none;
+            border-radius: 50px;
+            padding: 10px 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #prev-button {
+            background-color: #F5C84C;
+        }
+
+        #prev-button:hover {
+            background-color: #e0b43a;
+        }
+
+        #next-button {
+            background-color: #3B8C59;
+            color: white;
+        }
+
+        #next-button:hover {
+            background-color: #2a6b41;
+        }
+
+        .progress-container {
+            width: 90%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #F4F1EC;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #10C894;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Tela de resultados */
+        #results-page {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #F1E1AC;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .results-container {
+            background-color: #002F6C;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .results-message {
+            background-color: #C8102E;
+            border-radius: 50px;
+            padding: 15px 30px;
+            margin-bottom: 20px;
+        }
+
+        .results-message-text {
+            font-family: 'Franklin Gothic Demi', Arial, sans-serif;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .results-text {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .results-mascot {
+            max-width: 200px;
+            margin: 20px auto;
+        }
+
+        /* Animações */
+        .fade-out {
+            animation: fadeOut 1s forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-square {
+                padding: 20px;
+            }
+            
+            .mascote {
+                max-width: 80px;
+            }
+            
+            .logo {
+                max-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Página de introdução -->
+    <div id="intro-page">
+        <video id="intro-video" autoplay muted>
+            <source src="VIDEOINTRO.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+        <audio id="intro-audio">
+            <source src="SOMINTRO.mp3" type="audio/mp3">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+    </div>
+
+    <!-- Página inicial do quiz -->
+    <div id="home-page">
+        <img id="mascot-neutro" src="MASCOTENEUTRO.png" alt="Mascote">
+        <button id="start-button">INICIAR EXERCÍCIO</button>
+        <div id="difficulty-buttons">
+            <button class="difficulty-btn" id="easy-btn">FÁCIL</button>
+            <button class="difficulty-btn" id="difficult-btn">DIFÍCIL</button>
+        </div>
+    </div>
+
+    <!-- Quiz Fácil -->
+    <div id="quiz-easy" class="quiz-container">
+        <img class="logo" src="LOGODAMIAO.png" alt="Logo">
+        <div class="main-square">
+            <img class="mascote" src="MASCOTENINHO.png" alt="Mascote">
+            <div class="enunciado">
+                <p class="enunciado-text">Escolha a tradução:</p>
+            </div>
+            <p class="question-text" id="easy-question-text"></p>
+            <div class="audio-controls">
+                <button class="audio-btn" id="easy-replay-btn">
+                    <img src="replay-icon.png" alt="Repetir">
+                </button>
+                <input type="range" id="easy-speed-control" min="0.5" max="2" step="0.1" value="1">
+            </div>
+            <div class="options-container" id="easy-options-container"></div>
+            <button class="check-button" id="easy-check-button">Verificar</button>
+            <div class="feedback" id="easy-feedback"></div>
+            <p class="correct-answer" id="easy-correct-answer"></p>
+        </div>
+        <div class="navigation-buttons">
+            <button class="nav-button" id="easy-prev-button">VOLTAR</button>
+            <button class="nav-button" id="easy-next-button">AVANÇAR</button>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="easy-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Difícil -->
+    <div id="quiz-difficult" class="quiz-container">
+        <img class="logo" src="LOGODAMIAO.png" alt="Logo">
+        <div class="main-square">
+            <img class="mascote" src="MASCOTENINHO.png" alt="Mascote">
+            <div class="enunciado">
+                <p class="enunciado-text">Escute o áudio e escolha o número em francês:</p>
+            </div>
+            <div class="audio-controls">
+                <button class="audio-btn" id="difficult-replay-btn">
+                    <img src="replay-icon.png" alt="Repetir">
+                </button>
+                <input type="range" id="difficult-speed-control" min="0.5" max="2" step="0.1" value="1">
+            </div>
+            <div class="options-container" id="difficult-options-container"></div>
+            <button class="check-button" id="difficult-check-button">Verificar</button>
+            <div class="feedback" id="difficult-feedback"></div>
+            <p class="correct-answer" id="difficult-correct-answer"></p>
+        </div>
+        <div class="navigation-buttons">
+            <button class="nav-button" id="difficult-prev-button">VOLTAR</button>
+            <button class="nav-button" id="difficult-next-button">AVANÇAR</button>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="difficult-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de resultados -->
+    <div id="results-page">
+        <div class="results-container">
+            <div class="results-message">
+                <p class="results-message-text" id="results-title"></p>
+            </div>
+            <p class="results-text" id="results-description"></p>
+            <img class="results-mascot" id="results-mascot" src="" alt="Mascote">
+        </div>
+    </div>
+
+    <!-- Áudios -->
+    <audio id="button-sound" src="BUTTON.mp3"></audio>
+    <audio id="win-sound" src="WIN.wav"></audio>
+    <audio id="error-sound" src="ERROR.wav"></audio>
+    <audio id="positive-sound" src="POSITIVO.mp3"></audio>
+    <audio id="negative-sound" src="NEGATIVO.mp3"></audio>
+    <audio id="question-audio"></audio>
+
+    <script src="quiz-responsivo.js"></script>
+    <script>
+        // Dados do quiz
+        const quizData = [
+            { french: "un", portuguese: "um", audio: "un.mp3" },
+            { french: "une", portuguese: "uma", audio: "une.mp3" },
+            { french: "deux", portuguese: "dois", audio: "deux.mp3" },
+            { french: "trois", portuguese: "três", audio: "trois.mp3" },
+            { french: "quatre", portuguese: "quatro", audio: "quatre.mp3" },
+            { french: "cinq", portuguese: "cinco", audio: "cinq.mp3" },
+            { french: "six", portuguese: "seis", audio: "six.mp3" },
+            { french: "sept", portuguese: "sete", audio: "sept.mp3" },
+            { french: "huit", portuguese: "oito", audio: "huit.mp3" },
+            { french: "neuf", portuguese: "nove", audio: "neuf.mp3" },
+            { french: "dix", portuguese: "dez", audio: "dix.mp3" },
+            { french: "onze", portuguese: "onze", audio: "onze.mp3" },
+            { french: "douze", portuguese: "doze", audio: "douze.mp3" },
+            { french: "treize", portuguese: "treze", audio: "treize.mp3" },
+            { french: "quatorze", portuguese: "catorze", audio: "quatorze.mp3" },
+            { french: "quinze", portuguese: "quinze", audio: "quinze.mp3" },
+            { french: "seize", portuguese: "dezesseis", audio: "seize.mp3" },
+            { french: "dix-sept", portuguese: "dezessete", audio: "dix-sept.mp3" },
+            { french: "dix-huit", portuguese: "dezoito", audio: "dix-huit.mp3" },
+            { french: "vingt", portuguese: "vinte", audio: "VINGT.MP3" },
+            { french: "vingt-et-un", portuguese: "vinte e um", audio: "vingt-et-un.mp3" },
+            { french: "vingt-cinq", portuguese: "vinte e cinco", audio: "vingt-cinq.mp3" },
+            { french: "trente-et-un", portuguese: "trinta e um", audio: "trente-et-un.mp3" },
+            { french: "trente-six", portuguese: "trinta e seis", audio: "trente-six.mp3" },
+            { french: "quarante-et-un", portuguese: "quarenta e um", audio: "quarante-et-un.mp3" },
+            { french: "quarante-trois", portuguese: "quarenta e três", audio: "quarante-trois.mp3" },
+            { french: "quarante-huit", portuguese: "quarenta e oito", audio: "quarante-huit.mp3" },
+            { french: "cinquante-et-un", portuguese: "cinquenta e um", audio: "cinquante-et-un.mp3" },
+            { french: "cinquante-six", portuguese: "cinquenta e seis", audio: "cinquante-six.mp3" },
+            { french: "cinquante-neuf", portuguese: "cinquenta e nove", audio: "cinquante-neuf.mp3" },
+            { french: "soixante-et-un", portuguese: "sessenta e um", audio: "soixante-et-un.mp3" },
+            { french: "soixante-trois", portuguese: "sessenta e três", audio: "soixante-trois.mp3" },
+            { french: "soixante-neuf", portuguese: "sessenta e nove", audio: "soixante-neuf.mp3" },
+            { french: "soixante-onze", portuguese: "setenta e um", audio: "soixante-onze.mp3" },
+            { french: "soixante-douze", portuguese: "setenta e dois", audio: "soixante-douze.mp3" },
+            { french: "soixante-treize", portuguese: "setenta e três", audio: "soixante-treize.mp3" },
+            { french: "soixante-seize", portuguese: "setenta e seis", audio: "soixante-seize.mp3" },
+            { french: "soixante-dix-huit", portuguese: "setenta e oito", audio: "soixante-dix-huit.mp3" },
+            { french: "quatre-vingts", portuguese: "oitenta", audio: "quatre-vingts.mp3" },
+            { french: "quatre-vingt-deux", portuguese: "oitenta e dois", audio: "quatre-vingt-deux.mp3" },
+            { french: "quatre-vingt-trois", portuguese: "oitenta e três", audio: "quatre-vingt-trois.mp3" },
+            { french: "quatre-vingt-cinq", portuguese: "oitenta e cinco", audio: "quatre-vingt-cinq.mp3" },
+            { french: "quatre-vingt-huit", portuguese: "oitenta e oito", audio: "quatre-vingt-huit.mp3" },
+            { french: "quatre-vingt-neuf", portuguese: "oitenta e nove", audio: "quatre-vingt-neuf.mp3" },
+            { french: "quatre-vingt-quinze", portuguese: "noventa e cinco", audio: "quatre-vingt-quinze.mp3" },
+            { french: "quatre-vingt-seize", portuguese: "noventa e seis", audio: "quatre-vingt-seize.mp3" },
+            { french: "quatre-vingt-dix", portuguese: "noventa", audio: "quatre-vingt-dix.mp3" },
+            { french: "quatre-vingt-dix-huit", portuguese: "noventa e oito", audio: "quatre-vingt-dix-huit.mp3" },
+            { french: "quatre-vingt-dix-neuf", portuguese: "noventa e nove", audio: "quatre-vingt-dix-neuf.mp3" },
+            { french: "cent-soixante-deux", portuguese: "cento e sessenta e dois", audio: "cent-soixante-deux.mp3" },
+            { french: "cent-soixante-treize", portuguese: "cento e setenta e três", audio: "cent-soixante-treize.mp3" },
+            { french: "cent-quatre-vingt-neuf", portuguese: "cento e oitenta e nove", audio: "cent-quatre-vingt-neuf.mp3" },
+            { french: "cent-quatre-vingt-dix-huit", portuguese: "cento e noventa e oito", audio: "cent-quatre-vingt-dix-huit.mp3" },
+            { french: "deux-cent-trente-trois", portuguese: "duzentos e trinta e três", audio: "deux-cent-trente-trois.mp3" },
+            { french: "deux-cent-soixante", portuguese: "duzentos e sessenta", audio: "deux-cent-soixante.mp3" },
+            { french: "deux-cent-quatre-vingts", portuguese: "duzentos e oitenta", audio: "deux-cent-quatre-vingts.mp3" },
+            { french: "trois-cents", portuguese: "trezentos", audio: "trois-cents.mp3" },
+            { french: "trois-cent-vingt-et-un", portuguese: "trezentos e vinte e um", audio: "trois-cent-vingt-et-un.mp3" },
+            { french: "trois-cent-soixante-quinze", portuguese: "trezentos e setenta e cinco", audio: "trois-cent-soixante-quinze.mp3" },
+            { french: "quatre-cent-quarante-six", portuguese: "quatrocentos e quarenta e seis", audio: "quatre-cent-quatrante-six.mp3" },
+            { french: "quatre-cent-quatre-vingt-quatre", portuguese: "quatrocentos e oitenta e quatro", audio: "quatre-cent-quatre-vingt-quatre.mp3" },
+            { french: "six-cents", portuguese: "seiscentos", audio: "six-cents.mp3" },
+            { french: "six-cent-deux", portuguese: "seiscentos e dois", audio: "six-cent-deux.mp3" },
+            { french: "six-cent-soixante-seize", portuguese: "seiscentos e setenta e seis", audio: "six-cent-soixante-seize.mp3" },
+            { french: "sept-cent-sept", portuguese: "setecentos e sete", audio: "sept-cent-sept.mp3" },
+            { french: "neuf-cent-quatre-vingt-quinze", portuguese: "novecentos e noventa e cinco", audio: "neuf-cent-quatre-vingt-quinze.mp3" }
+        ];
+
+        // Estado do quiz
+        let currentQuiz = {
+            mode: null, // 'easy' ou 'difficult'
+            currentQuestion: 0,
+            score: 0,
+            userAnswers: [],
+            answered: false
+        };
+
+        // Elementos DOM
+        const introPage = document.getElementById('intro-page');
+        const introVideo = document.getElementById('intro-video');
+        const introAudio = document.getElementById('intro-audio');
+        const homePage = document.getElementById('home-page');
+        const startButton = document.getElementById('start-button');
+        const difficultyButtons = document.getElementById('difficulty-buttons');
+        const easyBtn = document.getElementById('easy-btn');
+        const difficultBtn = document.getElementById('difficult-btn');
+        const quizEasy = document.getElementById('quiz-easy');
+        const quizDifficult = document.getElementById('quiz-difficult');
+        const resultsPage = document.getElementById('results-page');
+
+        // Elementos do quiz fácil
+        const easyQuestionText = document.getElementById('easy-question-text');
+        const easyReplayBtn = document.getElementById('easy-replay-btn');
+        const easySpeedControl = document.getElementById('easy-speed-control');
+        const easyOptionsContainer = document.getElementById('easy-options-container');
+        const easyCheckButton = document.getElementById('easy-check-button');
+        const easyFeedback = document.getElementById('easy-feedback');
+        const easyCorrectAnswer = document.getElementById('easy-correct-answer');
+        const easyPrevButton = document.getElementById('easy-prev-button');
+        const easyNextButton = document.getElementById('easy-next-button');
+        const easyProgress = document.getElementById('easy-progress');
+
+        // Elementos do quiz difícil
+        const difficultReplayBtn = document.getElementById('difficult-replay-btn');
+        const difficultSpeedControl = document.getElementById('difficult-speed-control');
+        const difficultOptionsContainer = document.getElementById('difficult-options-container');
+        const difficultCheckButton = document.getElementById('difficult-check-button');
+        const difficultFeedback = document.getElementById('difficult-feedback');
+        const difficultCorrectAnswer = document.getElementById('difficult-correct-answer');
+        const difficultPrevButton = document.getElementById('difficult-prev-button');
+        const difficultNextButton = document.getElementById('difficult-next-button');
+        const difficultProgress = document.getElementById('difficult-progress');
+
+        // Elementos de resultados
+        const resultsTitle = document.getElementById('results-title');
+        const resultsDescription = document.getElementById('results-description');
+        const resultsMascot = document.getElementById('results-mascot');
+
+        // Áudios
+        const buttonSound = document.getElementById('button-sound');
+        const winSound = document.getElementById('win-sound');
+        const errorSound = document.getElementById('error-sound');
+        const positiveSound = document.getElementById('positive-sound');
+        const negativeSound = document.getElementById('negative-sound');
+        const questionAudio = document.getElementById('question-audio');
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verificar se há progresso salvo
+            const savedProgress = localStorage.getItem('quizProgress');
+            if (savedProgress) {
+                currentQuiz = JSON.parse(savedProgress);
+            }
+
+            // Reproduzir vídeo e áudio de introdução
+            introVideo.play();
+            introAudio.play();
+
+            // Quando o vídeo terminar, ir para a página inicial
+            introVideo.addEventListener('ended', () => {
+                introPage.classList.add('fade-out');
+                setTimeout(() => {
+                    introPage.style.display = 'none';
+                    homePage.style.display = 'flex';
+                    homePage.classList.add('fade-in');
+                }, 1000);
+            });
+
+            // Event listeners
+            startButton.addEventListener('click', () => {
+                playSound(buttonSound);
+                startButton.style.display = 'none';
+                difficultyButtons.style.display = 'flex';
+            });
+
+            easyBtn.addEventListener('click', () => {
+                playSound(buttonSound);
+                startQuiz('easy');
+            });
+
+            difficultBtn.addEventListener('click', () => {
+                playSound(buttonSound);
+                startQuiz('difficult');
+            });
+
+            easyCheckButton.addEventListener('click', checkAnswer);
+            difficultCheckButton.addEventListener('click', checkAnswer);
+
+            easyPrevButton.addEventListener('click', () => {
+                playSound(buttonSound);
+                navigateQuestion(-1);
+            });
+
+            easyNextButton.addEventListener('click', () => {
+                playSound(buttonSound);
+                navigateQuestion(1);
+            });
+
+            difficultPrevButton.addEventListener('click', () => {
+                playSound(buttonSound);
+                navigateQuestion(-1);
+            });
+
+            difficultNextButton.addEventListener('click', () => {
+                playSound(buttonSound);
+                navigateQuestion(1);
+            });
+
+            easyReplayBtn.addEventListener('click', () => playQuestionAudio());
+            difficultReplayBtn.addEventListener('click', () => playQuestionAudio());
+
+            easySpeedControl.addEventListener('input', () => {
+                questionAudio.playbackRate = easySpeedControl.value;
+            });
+
+            difficultSpeedControl.addEventListener('input', () => {
+                questionAudio.playbackRate = difficultSpeedControl.value;
+            });
+        });
+
+        // Funções do quiz
+        function startQuiz(mode) {
+            currentQuiz.mode = mode;
+            currentQuiz.currentQuestion = 0;
+            currentQuiz.score = 0;
+            currentQuiz.userAnswers = [];
+            currentQuiz.answered = false;
+
+            homePage.style.display = 'none';
+            if (mode === 'easy') {
+                quizEasy.style.display = 'flex';
+                loadQuestion();
+            } else {
+                quizDifficult.style.display = 'flex';
+                loadQuestion();
+            }
+        }
+
+        function loadQuestion() {
+            const question = quizData[currentQuiz.currentQuestion];
+            const isEasy = currentQuiz.mode === 'easy';
+            
+            // Atualizar elementos com base no modo
+            if (isEasy) {
+                easyQuestionText.textContent = question.french;
+                easyCorrectAnswer.textContent = '';
+                easyFeedback.innerHTML = '';
+                easyOptionsContainer.innerHTML = '';
+                
+                // Criar opções
+                const options = generateOptions(question.portuguese, false);
+                options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'option';
+                    button.textContent = option;
+                    button.addEventListener('click', () => selectOption(button, option));
+                    easyOptionsContainer.appendChild(button);
+                });
+                
+                // Atualizar progresso
+                easyProgress.style.width = `${(currentQuiz.currentQuestion / quizData.length) * 100}%`;
+            } else {
+                difficultCorrectAnswer.textContent = '';
+                difficultFeedback.innerHTML = '';
+                difficultOptionsContainer.innerHTML = '';
+                
+                // Criar opções
+                const options = generateOptions(question.french, true);
+                options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'option';
+                    button.textContent = option;
+                    button.addEventListener('click', () => selectOption(button, option));
+                    difficultOptionsContainer.appendChild(button);
+                });
+                
+                // Atualizar progresso
+                difficultProgress.style.width = `${(currentQuiz.currentQuestion / quizData.length) * 100}%`;
+            }
+            
+            // Configurar áudio da questão
+            questionAudio.src = question.audio;
+            questionAudio.playbackRate = isEasy ? easySpeedControl.value : difficultSpeedControl.value;
+            
+            // Reproduzir áudio automaticamente
+            setTimeout(() => {
+                playQuestionAudio();
+            }, 500);
+            
+            // Resetar estado de resposta
+            currentQuiz.answered = false;
+            currentQuiz.selectedOption = null;
+            
+            // Habilitar/desabilitar botões de navegação
+            updateNavigationButtons();
+            
+            // Salvar progresso
+            saveProgress();
+        }
+
+        function generateOptions(correctAnswer, isFrench) {
+            // Incluir a resposta correta
+            const options = [correctAnswer];
+            
+            // Adicionar opções incorretas aleatórias
+            while (options.length < 4) {
+                const randomIndex = Math.floor(Math.random() * quizData.length);
+                const randomOption = isFrench ? quizData[randomIndex].french : quizData[randomIndex].portuguese;
+                
+                // Evitar duplicatas
+                if (!options.includes(randomOption) && randomOption !== correctAnswer) {
+                    options.push(randomOption);
+                }
+            }
+            
+            // Embaralhar opções
+            return shuffleArray(options);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function selectOption(button, option) {
+            if (currentQuiz.answered) return;
+            
+            playSound(buttonSound);
+            
+            // Remover seleção anterior
+            const options = currentQuiz.mode === 'easy' ? 
+                easyOptionsContainer.querySelectorAll('.option') : 
+                difficultOptionsContainer.querySelectorAll('.option');
+            
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            // Selecionar nova opção
+            button.classList.add('selected');
+            currentQuiz.selectedOption = option;
+        }
+
+        function checkAnswer() {
+            if (currentQuiz.answered || !currentQuiz.selectedOption) return;
+            
+            playSound(buttonSound);
+            
+            const question = quizData[currentQuiz.currentQuestion];
+            const isCorrect = currentQuiz.mode === 'easy' ? 
+                currentQuiz.selectedOption === question.portuguese : 
+                currentQuiz.selectedOption === question.french;
+            
+            // Atualizar pontuação
+            if (isCorrect) {
+                currentQuiz.score++;
+                playSound(winSound);
+            } else {
+                playSound(errorSound);
+            }
+            
+            // Marcar questão como respondida
+            currentQuiz.answered = true;
+            currentQuiz.userAnswers[currentQuiz.currentQuestion] = {
+                selected: currentQuiz.selectedOption,
+                correct: isCorrect
+            };
+            
+            // Mostrar feedback
+            showFeedback(isCorrect);
+            
+            // Salvar progresso
+            saveProgress();
+        }
+
+        function showFeedback(isCorrect) {
+            const question = quizData[currentQuiz.currentQuestion];
+            const isEasy = currentQuiz.mode === 'easy';
+            
+            // Atualizar elementos de feedback
+            if (isEasy) {
+                easyFeedback.innerHTML = `<p class="feedback-text" style="color: ${isCorrect ? '#3B8C59' : '#C8102E'}">${isCorrect ? 'CORRETO' : 'INCORRETO'}</p>`;
+                easyCorrectAnswer.textContent = `Resposta correta: ${question.portuguese}`;
+                
+                // Destacar opções
+                const options = easyOptionsContainer.querySelectorAll('.option');
+                options.forEach(option => {
+                    if (option.textContent === question.portuguese) {
+                        option.classList.add('correct');
+                    } else if (option.classList.contains('selected') && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+            } else {
+                difficultFeedback.innerHTML = `<p class="feedback-text" style="color: ${isCorrect ? '#3B8C59' : '#C8102E'}">${isCorrect ? 'CORRETO' : 'INCORRETO'}</p>`;
+                difficultCorrectAnswer.textContent = `Resposta correta: ${question.french}`;
+                
+                // Destacar opções
+                const options = difficultOptionsContainer.querySelectorAll('.option');
+                options.forEach(option => {
+                    if (option.textContent === question.french) {
+                        option.classList.add('correct');
+                    } else if (option.classList.contains('selected') && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+            }
+        }
+
+        function navigateQuestion(direction) {
+            const newIndex = currentQuiz.currentQuestion + direction;
+            
+            // Verificar limites
+            if (newIndex < 0 || newIndex >= quizData.length) {
+                if (newIndex >= quizData.length && currentQuiz.answered) {
+                    showResults();
+                }
+                return;
+            }
+            
+            // Navegar para a próxima questão
+            currentQuiz.currentQuestion = newIndex;
+            loadQuestion();
+        }
+
+        function updateNavigationButtons() {
+            const isEasy = currentQuiz.mode === 'easy';
+            const prevButton = isEasy ? easyPrevButton : difficultPrevButton;
+            const nextButton = isEasy ? easyNextButton : difficultNextButton;
+            
+            // Habilitar/desabilitar botões com base na posição
+            prevButton.disabled = currentQuiz.currentQuestion === 0;
+            nextButton.textContent = currentQuiz.currentQuestion === quizData.length - 1 ? 'FINALIZAR' : 'AVANÇAR';
+        }
+
+        function playQuestionAudio() {
+            questionAudio.currentTime = 0;
+            questionAudio.play();
+        }
+
+        function playSound(audioElement) {
+            audioElement.currentTime = 0;
+            audioElement.play();
+        }
+
+        function showResults() {
+            // Calcular porcentagem de acertos
+            const percentage = (currentQuiz.score / quizData.length) * 100;
+            
+            // Determinar resultado
+            let title, description, mascote, audio;
+            
+            if (percentage >= 95) {
+                title = "EXCELENTE";
+                description = `Parabéns pelo seu desempenho excepcional! Você alcançou um resultado EXCELENTE, acertando ${currentQuiz.score} das palavras no quiz de escrita em francês! Isso demonstra um domínio impressionante das expressões e da ortografia francesa. Continue assim, pois seu esforço e dedicação são inspiradores! Este resultado reflete não apenas sua habilidade linguística, mas também sua atenção aos detalhes e compromisso em aprender. Que tal continuar explorando o idioma com o mesmo entusiasmo? A prática constante vai te levar ainda mais longe.`;
+                mascote = "MASCOTEFELIZ.png";
+                audio = positiveSound;
+            } else if (percentage >= 75) {
+                title = "PARABÉNS";
+                description = `Parabéns pelo seu desempenho! Você obteve um BOM resultado, acertando ${currentQuiz.score} das palavras no quiz de escrita em francês! Isso mostra que você está no caminho certo, com uma sólida compreensão do idioma. Sua dedicação está valendo a pena, e cada palavra certa é um passo rumo à fluência. Continue assim, brilhando no aprendizado do francês!`;
+                mascote = "MASCOTEALEGRE.png";
+                audio = positiveSound;
+            } else if (percentage >= 60) {
+                title = "QUASE LÁ";
+                description = `Você alcançou o nível SUFICIENTE, acertando ${currentQuiz.score} das palavras no quiz de escrita em francês! Isso indica um progresso notável, com uma boa base no idioma. Sua dedicação está clara, e você está muito próximo de resultados ainda melhores. Cada palavra escrita é um avanço no aprendizado do francês. Continue se empenhando, e logo verá seu desempenho crescer! Siga firme na jornada para dominar o idioma!`;
+                mascote = "MASCOTEDUVIDA.png";
+                audio = negativeSound;
+            } else {
+                title = "NÃO FOI DESSA VEZ";
+                description = `Você obteve o nível INSUFICIENTE, acertando ${currentQuiz.score} das palavras no quiz de escrita em francês. Não desanime! Cada tentativa é uma oportunidade de aprendizado, e você já deu o primeiro passo ao participar. O francês pode ser desafiador, mas com prática, você vai melhorar. Reforce as palavras e continue se dedicando. Sua persistência vai te levar mais longe na jornada do idioma!`;
+                mascote = "MASCOTEDUVIDA.png";
+                audio = negativeSound;
+            }
+            
+            // Atualizar elementos de resultados
+            resultsTitle.textContent = title;
+            resultsDescription.textContent = description;
+            resultsMascot.src = mascote;
+            
+            // Reproduzir áudio de resultado
+            playSound(audio);
+            
+            // Mostrar tela de resultados
+            if (currentQuiz.mode === 'easy') {
+                quizEasy.style.display = 'none';
+            } else {
+                quizDifficult.style.display = 'none';
+            }
+            
+            resultsPage.style.display = 'flex';
+            
+            // Limpar progresso salvo
+            localStorage.removeItem('quizProgress');
+        }
+
+        function saveProgress() {
+            localStorage.setItem('quizProgress', JSON.stringify(currentQuiz));
+        }
+    </script>
+</body>
+</html>
