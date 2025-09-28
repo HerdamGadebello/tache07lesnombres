@@ -21,6 +21,7 @@ function adjustLayoutForScreenSize() {
     const mascotes = document.querySelectorAll('.mascote');
     const logos = document.querySelectorAll('.logo');
     const optionsContainers = document.querySelectorAll('.options-container');
+    const mascotNeutro = document.getElementById('mascot-neutro');
     
     if (screenWidth <= 768) {
         // Layout para dispositivos móveis
@@ -40,6 +41,10 @@ function adjustLayoutForScreenSize() {
             logo.style.top = '10px';
             logo.style.left = '10px';
         });
+        
+        if (mascotNeutro) {
+            mascotNeutro.style.maxWidth = '250px';
+        }
         
         optionsContainers.forEach(container => {
             container.style.gridTemplateColumns = '1fr';
@@ -63,6 +68,10 @@ function adjustLayoutForScreenSize() {
             logo.style.maxWidth = '120px';
         });
         
+        if (mascotNeutro) {
+            mascotNeutro.style.maxWidth = '280px';
+        }
+        
         optionsContainers.forEach(container => {
             container.style.gridTemplateColumns = '1fr 1fr';
         });
@@ -82,6 +91,10 @@ function adjustLayoutForScreenSize() {
         logos.forEach(logo => {
             logo.style.maxWidth = '150px';
         });
+        
+        if (mascotNeutro) {
+            mascotNeutro.style.maxWidth = '300px';
+        }
         
         optionsContainers.forEach(container => {
             container.style.gridTemplateColumns = '1fr 1fr';
