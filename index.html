@@ -53,7 +53,10 @@
 
         #mascot-neutro {
             max-width: 300px;
+            width: 80%;
+            height: auto;
             margin-bottom: 30px;
+            object-fit: contain;
         }
 
         #start-button {
@@ -77,6 +80,7 @@
             display: none;
             margin-top: 20px;
             gap: 20px;
+            flex-direction: column;
         }
 
         .difficulty-btn {
@@ -114,6 +118,9 @@
             top: 20px;
             left: 20px;
             max-width: 150px;
+            width: 25%;
+            height: auto;
+            object-fit: contain;
         }
 
         .main-square {
@@ -131,6 +138,9 @@
             bottom: -20px;
             left: -20px;
             max-width: 120px;
+            width: 25%;
+            height: auto;
+            object-fit: contain;
         }
 
         .enunciado {
@@ -174,11 +184,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        .audio-btn img {
-            width: 20px;
-            height: 20px;
+            font-size: 1.2rem;
         }
 
         .options-container {
@@ -196,11 +202,16 @@
             font-family: 'Poppins', sans-serif;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
         }
 
         .option:hover {
             background-color: #e0ddd8;
+        }
+
+        .option.selected {
+            background-color: #C6B9DD;
+            transform: scale(1.02);
         }
 
         .option.correct {
@@ -349,7 +360,10 @@
 
         .results-mascot {
             max-width: 200px;
+            width: 50%;
+            height: auto;
             margin: 20px auto;
+            object-fit: contain;
         }
 
         /* Animações */
@@ -383,10 +397,51 @@
             
             .mascote {
                 max-width: 80px;
+                width: 20%;
             }
             
             .logo {
                 max-width: 100px;
+                width: 20%;
+            }
+            
+            .question-text {
+                font-size: 1.4rem;
+            }
+            
+            .difficulty-btn {
+                padding: 12px 25px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-square {
+                padding: 15px;
+            }
+            
+            .mascote {
+                max-width: 60px;
+                width: 15%;
+            }
+            
+            .logo {
+                max-width: 80px;
+                width: 15%;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .option {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+            
+            .check-button {
+                padding: 12px 25px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -424,9 +479,7 @@
             </div>
             <p class="question-text" id="easy-question-text"></p>
             <div class="audio-controls">
-                <button class="audio-btn" id="easy-replay-btn">
-                    <img src="replay-icon.png" alt="Repetir">
-                </button>
+                <button class="audio-btn" id="easy-replay-btn">↻</button>
                 <input type="range" id="easy-speed-control" min="0.5" max="2" step="0.1" value="1">
             </div>
             <div class="options-container" id="easy-options-container"></div>
@@ -454,9 +507,7 @@
                 <p class="enunciado-text">Escute o áudio e escolha o número em francês:</p>
             </div>
             <div class="audio-controls">
-                <button class="audio-btn" id="difficult-replay-btn">
-                    <img src="replay-icon.png" alt="Repetir">
-                </button>
+                <button class="audio-btn" id="difficult-replay-btn">↻</button>
                 <input type="range" id="difficult-speed-control" min="0.5" max="2" step="0.1" value="1">
             </div>
             <div class="options-container" id="difficult-options-container"></div>
@@ -496,8 +547,8 @@
 
     <script src="quiz-responsivo.js"></script>
     <script>
-        // Dados do quiz
-        const quizData = [
+        // Dados do quiz - embaralhados
+        const quizData = shuffleArray([
             { french: "un", portuguese: "um", audio: "un.mp3" },
             { french: "une", portuguese: "uma", audio: "une.mp3" },
             { french: "deux", portuguese: "dois", audio: "deux.mp3" },
@@ -517,7 +568,8 @@
             { french: "seize", portuguese: "dezesseis", audio: "seize.mp3" },
             { french: "dix-sept", portuguese: "dezessete", audio: "dix-sept.mp3" },
             { french: "dix-huit", portuguese: "dezoito", audio: "dix-huit.mp3" },
-            { french: "vingt", portuguese: "vinte", audio: "VINGT.MP3" },
+            { french: "dix-neuf", portuguese: "dezenove", audio: "dix-neuf.mp3" },
+            { french: "vingt", portuguese: "vinte", audio: "vingt.mp3" },
             { french: "vingt-et-un", portuguese: "vinte e um", audio: "vingt-et-un.mp3" },
             { french: "vingt-cinq", portuguese: "vinte e cinco", audio: "vingt-cinq.mp3" },
             { french: "trente-et-un", portuguese: "trinta e um", audio: "trente-et-un.mp3" },
@@ -564,7 +616,7 @@
             { french: "six-cent-soixante-seize", portuguese: "seiscentos e setenta e seis", audio: "six-cent-soixante-seize.mp3" },
             { french: "sept-cent-sept", portuguese: "setecentos e sete", audio: "sept-cent-sept.mp3" },
             { french: "neuf-cent-quatre-vingt-quinze", portuguese: "novecentos e noventa e cinco", audio: "neuf-cent-quatre-vingt-quinze.mp3" }
-        ];
+        ]);
 
         // Estado do quiz
         let currentQuiz = {
@@ -623,6 +675,16 @@
         const positiveSound = document.getElementById('positive-sound');
         const negativeSound = document.getElementById('negative-sound');
         const questionAudio = document.getElementById('question-audio');
+
+        // Função para embaralhar array
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
@@ -738,7 +800,7 @@
                 });
                 
                 // Atualizar progresso
-                easyProgress.style.width = `${(currentQuiz.currentQuestion / quizData.length) * 100}%`;
+                easyProgress.style.width = `${((currentQuiz.currentQuestion + 1) / quizData.length) * 100}%`;
             } else {
                 difficultCorrectAnswer.textContent = '';
                 difficultFeedback.innerHTML = '';
@@ -755,7 +817,7 @@
                 });
                 
                 // Atualizar progresso
-                difficultProgress.style.width = `${(currentQuiz.currentQuestion / quizData.length) * 100}%`;
+                difficultProgress.style.width = `${((currentQuiz.currentQuestion + 1) / quizData.length) * 100}%`;
             }
             
             // Configurar áudio da questão
@@ -770,6 +832,15 @@
             // Resetar estado de resposta
             currentQuiz.answered = false;
             currentQuiz.selectedOption = null;
+            
+            // Resetar botão de verificar
+            if (isEasy) {
+                easyCheckButton.textContent = "Verificar";
+                easyCheckButton.disabled = false;
+            } else {
+                difficultCheckButton.textContent = "Verificar";
+                difficultCheckButton.disabled = false;
+            }
             
             // Habilitar/desabilitar botões de navegação
             updateNavigationButtons();
@@ -795,14 +866,6 @@
             
             // Embaralhar opções
             return shuffleArray(options);
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
         }
 
         function selectOption(button, option) {
@@ -846,6 +909,21 @@
                 selected: currentQuiz.selectedOption,
                 correct: isCorrect
             };
+            
+            // Mudar botão "Verificar" para "Avançar"
+            if (currentQuiz.mode === 'easy') {
+                easyCheckButton.textContent = "Avançar";
+                easyCheckButton.onclick = () => {
+                    playSound(buttonSound);
+                    navigateQuestion(1);
+                };
+            } else {
+                difficultCheckButton.textContent = "Avançar";
+                difficultCheckButton.onclick = () => {
+                    playSound(buttonSound);
+                    navigateQuestion(1);
+                };
+            }
             
             // Mostrar feedback
             showFeedback(isCorrect);
@@ -916,12 +994,20 @@
 
         function playQuestionAudio() {
             questionAudio.currentTime = 0;
-            questionAudio.play();
+            questionAudio.play().catch(e => {
+                console.log("Erro ao reproduzir áudio:", e);
+                // Tentar reproduzir novamente após um pequeno atraso
+                setTimeout(() => {
+                    questionAudio.play();
+                }, 500);
+            });
         }
 
         function playSound(audioElement) {
             audioElement.currentTime = 0;
-            audioElement.play();
+            audioElement.play().catch(e => {
+                console.log("Erro ao reproduzir som:", e);
+            });
         }
 
         function showResults() {
