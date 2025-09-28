@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz de Tradução em Francês</title>
     <style>
+        /* (Manter todo o CSS anterior igual) */
         /* Reset e estilos gerais */
         * {
             margin: 0;
@@ -447,6 +448,7 @@
     </style>
 </head>
 <body>
+    <!-- (Manter todo o HTML anterior igual) -->
     <!-- Página de introdução -->
     <div id="intro-page">
         <video id="intro-video" autoplay muted>
@@ -547,120 +549,112 @@
 
     <script src="quiz-responsivo.js"></script>
     <script>
-        // Dados completos do quiz
-        const allQuizData = [
-            // 21 questões (de un, une até vingt)
-            { french: "un", portuguese: "um", audio: "un.mp3", category: "básico" },
-            { french: "une", portuguese: "uma", audio: "une.mp3", category: "básico" },
-            { french: "deux", portuguese: "dois", audio: "deux.mp3", category: "básico" },
-            { french: "trois", portuguese: "três", audio: "trois.mp3", category: "básico" },
-            { french: "quatre", portuguese: "quatro", audio: "quatre.mp3", category: "básico" },
-            { french: "cinq", portuguese: "cinco", audio: "cinq.mp3", category: "básico" },
-            { french: "six", portuguese: "seis", audio: "six.mp3", category: "básico" },
-            { french: "sept", portuguese: "sete", audio: "sept.mp3", category: "básico" },
-            { french: "huit", portuguese: "oito", audio: "huit.mp3", category: "básico" },
-            { french: "neuf", portuguese: "nove", audio: "neuf.mp3", category: "básico" },
-            { french: "dix", portuguese: "dez", audio: "dix.mp3", category: "básico" },
-            { french: "onze", portuguese: "onze", audio: "onze.mp3", category: "básico" },
-            { french: "douze", portuguese: "doze", audio: "douze.mp3", category: "básico" },
-            { french: "treize", portuguese: "treze", audio: "treize.mp3", category: "básico" },
-            { french: "quatorze", portuguese: "catorze", audio: "quatorze.mp3", category: "básico" },
-            { french: "quinze", portuguese: "quinze", audio: "quinze.mp3", category: "básico" },
-            { french: "seize", portuguese: "dezesseis", audio: "seize.mp3", category: "básico" },
-            { french: "dix-sept", portuguese: "dezessete", audio: "dix-sept.mp3", category: "básico" },
-            { french: "dix-huit", portuguese: "dezoito", audio: "dix-huit.mp3", category: "básico" },
-            { french: "dix-neuf", portuguese: "dezenove", audio: "dix-neuf.mp3", category: "básico" },
-            { french: "vingt", portuguese: "vinte", audio: "vingt.mp3", category: "básico" },
-            
-            // 3 questões para as dezenas (do 20 ao 99)
-            { french: "vingt-et-un", portuguese: "vinte e um", audio: "vingt-et-un.mp3", category: "dezenas" },
-            { french: "vingt-cinq", portuguese: "vinte e cinco", audio: "vingt-cinq.mp3", category: "dezenas" },
-            { french: "trente-et-un", portuguese: "trinta e um", audio: "trente-et-un.mp3", category: "dezenas" },
-            { french: "trente-six", portuguese: "trinta e seis", audio: "trente-six.mp3", category: "dezenas" },
-            { french: "quarante-et-un", portuguese: "quarenta e um", audio: "quarante-et-un.mp3", category: "dezenas" },
-            { french: "quarante-trois", portuguese: "quarenta e três", audio: "quarante-trois.mp3", category: "dezenas" },
-            { french: "quarante-huit", portuguese: "quarenta e oito", audio: "quarante-huit.mp3", category: "dezenas" },
-            { french: "cinquante-et-un", portuguese: "cinquenta e um", audio: "cinquante-et-un.mp3", category: "dezenas" },
-            { french: "cinquante-six", portuguese: "cinquenta e seis", audio: "cinquante-six.mp3", category: "dezenas" },
-            { french: "cinquante-neuf", portuguese: "cinquenta e nove", audio: "cinquante-neuf.mp3", category: "dezenas" },
-            { french: "soixante-et-un", portuguese: "sessenta e um", audio: "soixante-et-un.mp3", category: "dezenas" },
-            { french: "soixante-trois", portuguese: "sessenta e três", audio: "soixante-trois.mp3", category: "dezenas" },
-            { french: "soixante-neuf", portuguese: "sessenta e nove", audio: "soixante-neuf.mp3", category: "dezenas" },
-            { french: "soixante-onze", portuguese: "setenta e um", audio: "soixante-onze.mp3", category: "dezenas" },
-            { french: "soixante-douze", portuguese: "setenta e dois", audio: "soixante-douze.mp3", category: "dezenas" },
-            { french: "soixante-treize", portuguese: "setenta e três", audio: "soixante-treize.mp3", category: "dezenas" },
-            { french: "soixante-seize", portuguese: "setenta e seis", audio: "soixante-seize.mp3", category: "dezenas" },
-            { french: "soixante-dix-huit", portuguese: "setenta e oito", audio: "soixante-dix-huit.mp3", category: "dezenas" },
-            { french: "quatre-vingts", portuguese: "oitenta", audio: "quatre-vingts.mp3", category: "dezenas" },
-            { french: "quatre-vingt-deux", portuguese: "oitenta e dois", audio: "quatre-vingt-deux.mp3", category: "dezenas" },
-            { french: "quatre-vingt-trois", portuguese: "oitenta e três", audio: "quatre-vingt-trois.mp3", category: "dezenas" },
-            { french: "quatre-vingt-cinq", portuguese: "oitenta e cinco", audio: "quatre-vingt-cinq.mp3", category: "dezenas" },
-            { french: "quatre-vingt-huit", portuguese: "oitenta e oito", audio: "quatre-vingt-huit.mp3", category: "dezenas" },
-            { french: "quatre-vingt-neuf", portuguese: "oitenta e nove", audio: "quatre-vingt-neuf.mp3", category: "dezenas" },
-            { french: "quatre-vingt-quinze", portuguese: "noventa e cinco", audio: "quatre-vingt-quinze.mp3", category: "dezenas" },
-            { french: "quatre-vingt-seize", portuguese: "noventa e seis", audio: "quatre-vingt-seize.mp3", category: "dezenas" },
-            { french: "quatre-vingt-dix", portuguese: "noventa", audio: "quatre-vingt-dix.mp3", category: "dezenas" },
-            { french: "quatre-vingt-dix-huit", portuguese: "noventa e oito", audio: "quatre-vingt-dix-huit.mp3", category: "dezenas" },
-            { french: "quatre-vingt-dix-neuf", portuguese: "noventa e nove", audio: "quatre-vingt-dix-neuf.mp3", category: "dezenas" },
-            
-            // 2 questões para cada centena (do 100 ao 999 apenas com as centenas do gabarito)
-            { french: "cent-soixante-deux", portuguese: "cento e sessenta e dois", audio: "cent-soixante-deux.mp3", category: "centenas" },
-            { french: "cent-soixante-treize", portuguese: "cento e setenta e três", audio: "cent-soixante-treize.mp3", category: "centenas" },
-            { french: "cent-quatre-vingt-neuf", portuguese: "cento e oitenta e nove", audio: "cent-quatre-vingt-neuf.mp3", category: "centenas" },
-            { french: "cent-quatre-vingt-dix-huit", portuguese: "cento e noventa e oito", audio: "cent-quatre-vingt-dix-huit.mp3", category: "centenas" },
-            { french: "deux-cent-trente-trois", portuguese: "duzentos e trinta e três", audio: "deux-cent-trente-trois.mp3", category: "centenas" },
-            { french: "deux-cent-soixante", portuguese: "duzentos e sessenta", audio: "deux-cent-soixante.mp3", category: "centenas" },
-            { french: "deux-cent-quatre-vingts", portuguese: "duzentos e oitenta", audio: "deux-cent-quatre-vingts.mp3", category: "centenas" },
-            { french: "trois-cents", portuguese: "trezentos", audio: "trois-cents.mp3", category: "centenas" },
-            { french: "trois-cent-vingt-et-un", portuguese: "trezentos e vinte e um", audio: "trois-cent-vingt-et-un.mp3", category: "centenas" },
-            { french: "trois-cent-soixante-quinze", portuguese: "trezentos e setenta e cinco", audio: "trois-cent-soixante-quinze.mp3", category: "centenas" },
-            { french: "quatre-cent-quarante-six", portuguese: "quatrocentos e quarenta e seis", audio: "quatre-cent-quatrante-six.mp3", category: "centenas" },
-            { french: "quatre-cent-quatre-vingt-quatre", portuguese: "quatrocentos e oitenta e quatro", audio: "quatre-cent-quatre-vingt-quatre.mp3", category: "centenas" },
-            { french: "six-cents", portuguese: "seiscentos", audio: "six-cents.mp3", category: "centenas" },
-            { french: "six-cent-deux", portuguese: "seiscentos e dois", audio: "six-cent-deux.mp3", category: "centenas" },
-            { french: "six-cent-soixante-seize", portuguese: "seiscentos e setenta e seis", audio: "six-cent-soixante-seize.mp3", category: "centenas" },
-            { french: "sept-cent-sept", portuguese: "setecentos e sete", audio: "sept-cent-sept.mp3", category: "centenas" },
-            { french: "neuf-cent-quatre-vingt-quinze", portuguese: "novecentos e noventa e cinco", audio: "neuf-cent-quatre-vingt-quinze.mp3", category: "centenas" }
-        ];
+        // Dados completos do quiz organizados por categoria
+        const allQuizData = {
+            basic: [ // 21 questões (de un, une até vingt)
+                { french: "un", portuguese: "um", audio: "un.mp3" },
+                { french: "une", portuguese: "uma", audio: "une.mp3" },
+                { french: "deux", portuguese: "dois", audio: "deux.mp3" },
+                { french: "trois", portuguese: "três", audio: "trois.mp3" },
+                { french: "quatre", portuguese: "quatro", audio: "quatre.mp3" },
+                { french: "cinq", portuguese: "cinco", audio: "cinq.mp3" },
+                { french: "six", portuguese: "seis", audio: "six.mp3" },
+                { french: "sept", portuguese: "sete", audio: "sept.mp3" },
+                { french: "huit", portuguese: "oito", audio: "huit.mp3" },
+                { french: "neuf", portuguese: "nove", audio: "neuf.mp3" },
+                { french: "dix", portuguese: "dez", audio: "dix.mp3" },
+                { french: "onze", portuguese: "onze", audio: "onze.mp3" },
+                { french: "douze", portuguese: "doze", audio: "douze.mp3" },
+                { french: "treize", portuguese: "treze", audio: "treize.mp3" },
+                { french: "quatorze", portuguese: "catorze", audio: "quatorze.mp3" },
+                { french: "quinze", portuguese: "quinze", audio: "quinze.mp3" },
+                { french: "seize", portuguese: "dezesseis", audio: "seize.mp3" },
+                { french: "dix-sept", portuguese: "dezessete", audio: "dix-sept.mp3" },
+                { french: "dix-huit", portuguese: "dezoito", audio: "dix-huit.mp3" },
+                { french: "dix-neuf", portuguese: "dezenove", audio: "dix-neuf.mp3" },
+                { french: "vingt", portuguese: "vinte", audio: "vingt.mp3" }
+            ],
+            tens: [ // 12 questões para as dezenas (do 20 ao 99)
+                { french: "vingt-et-un", portuguese: "vinte e um", audio: "vingt-et-un.mp3" },
+                { french: "vingt-cinq", portuguese: "vinte e cinco", audio: "vingt-cinq.mp3" },
+                { french: "trente-et-un", portuguese: "trinta e um", audio: "trente-et-un.mp3" },
+                { french: "trente-six", portuguese: "trinta e seis", audio: "trente-six.mp3" },
+                { french: "quarante-et-un", portuguese: "quarenta e um", audio: "quarante-et-un.mp3" },
+                { french: "quarante-trois", portuguese: "quarenta e três", audio: "quarante-trois.mp3" },
+                { french: "quarante-huit", portuguese: "quarenta e oito", audio: "quarante-huit.mp3" },
+                { french: "cinquante-et-un", portuguese: "cinquenta e um", audio: "cinquante-et-un.mp3" },
+                { french: "cinquante-six", portuguese: "cinquenta e seis", audio: "cinquante-six.mp3" },
+                { french: "cinquante-neuf", portuguese: "cinquenta e nove", audio: "cinquante-neuf.mp3" },
+                { french: "soixante-et-un", portuguese: "sessenta e um", audio: "soixante-et-un.mp3" },
+                { french: "soixante-trois", portuguese: "sessenta e três", audio: "soixante-trois.mp3" },
+                { french: "soixante-neuf", portuguese: "sessenta e nove", audio: "soixante-neuf.mp3" },
+                { french: "soixante-onze", portuguese: "setenta e um", audio: "soixante-onze.mp3" },
+                { french: "soixante-douze", portuguese: "setenta e dois", audio: "soixante-douze.mp3" },
+                { french: "soixante-treize", portuguese: "setenta e três", audio: "soixante-treize.mp3" },
+                { french: "soixante-seize", portuguese: "setenta e seis", audio: "soixante-seize.mp3" },
+                { french: "soixante-dix-huit", portuguese: "setenta e oito", audio: "soixante-dix-huit.mp3" },
+                { french: "quatre-vingts", portuguese: "oitenta", audio: "quatre-vingts.mp3" },
+                { french: "quatre-vingt-deux", portuguese: "oitenta e dois", audio: "quatre-vingt-deux.mp3" },
+                { french: "quatre-vingt-trois", portuguese: "oitenta e três", audio: "quatre-vingt-trois.mp3" },
+                { french: "quatre-vingt-cinq", portuguese: "oitenta e cinco", audio: "quatre-vingt-cinq.mp3" },
+                { french: "quatre-vingt-huit", portuguese: "oitenta e oito", audio: "quatre-vingt-huit.mp3" },
+                { french: "quatre-vingt-neuf", portuguese: "oitenta e nove", audio: "quatre-vingt-neuf.mp3" },
+                { french: "quatre-vingt-quinze", portuguese: "noventa e cinco", audio: "quatre-vingt-quinze.mp3" },
+                { french: "quatre-vingt-seize", portuguese: "noventa e seis", audio: "quatre-vingt-seize.mp3" },
+                { french: "quatre-vingt-dix", portuguese: "noventa", audio: "quatre-vingt-dix.mp3" },
+                { french: "quatre-vingt-dix-huit", portuguese: "noventa e oito", audio: "quatre-vingt-dix-huit.mp3" },
+                { french: "quatre-vingt-dix-neuf", portuguese: "noventa e nove", audio: "quatre-vingt-dix-neuf.mp3" }
+            ],
+            hundreds: [ // 13 questões para centenas
+                { french: "cent-soixante-deux", portuguese: "cento e sessenta e dois", audio: "cent-soixante-deux.mp3" },
+                { french: "cent-soixante-treize", portuguese: "cento e setenta e três", audio: "cent-soixante-treize.mp3" },
+                { french: "cent-quatre-vingt-neuf", portuguese: "cento e oitenta e nove", audio: "cent-quatre-vingt-neuf.mp3" },
+                { french: "cent-quatre-vingt-dix-huit", portuguese: "cento e noventa e oito", audio: "cent-quatre-vingt-dix-huit.mp3" },
+                { french: "deux-cent-trente-trois", portuguese: "duzentos e trinta e três", audio: "deux-cent-trente-trois.mp3" },
+                { french: "deux-cent-soixante", portuguese: "duzentos e sessenta", audio: "deux-cent-soixante.mp3" },
+                { french: "deux-cent-quatre-vingts", portuguese: "duzentos e oitenta", audio: "deux-cent-quatre-vingts.mp3" },
+                { french: "trois-cents", portuguese: "trezentos", audio: "trois-cents.mp3" },
+                { french: "trois-cent-vingt-et-un", portuguese: "trezentos e vinte e um", audio: "trois-cent-vingt-et-un.mp3" },
+                { french: "trois-cent-soixante-quinze", portuguese: "trezentos e setenta e cinco", audio: "trois-cent-soixante-quinze.mp3" },
+                { french: "quatre-cent-quarante-six", portuguese: "quatrocentos e quarenta e seis", audio: "quatre-cent-quatrante-six.mp3" },
+                { french: "quatre-cent-quatre-vingt-quatre", portuguese: "quatrocentos e oitenta e quatro", audio: "quatre-cent-quatre-vingt-quatre.mp3" },
+                { french: "six-cents", portuguese: "seiscentos", audio: "six-cents.mp3" },
+                { french: "six-cent-deux", portuguese: "seiscentos e dois", audio: "six-cent-deux.mp3" },
+                { french: "six-cent-soixante-seize", portuguese: "seiscentos e setenta e seis", audio: "six-cent-soixante-seize.mp3" },
+                { french: "sept-cent-sept", portuguese: "setecentos e sete", audio: "sept-cent-sept.mp3" },
+                { french: "neuf-cent-quatre-vingt-quinze", portuguese: "novecentos e noventa e cinco", audio: "neuf-cent-quatre-vingt-quinze.mp3" }
+            ]
+        };
 
         // Função para selecionar exatamente 36 questões conforme especificado
         function selectQuizQuestions() {
-            // 21 questões básicas (de un até vingt)
-            const basicQuestions = allQuizData
-                .filter(q => q.category === "básico")
-                .slice(0, 21);
+            // 21 questões básicas (todas)
+            const basicQuestions = [...allQuizData.basic];
             
-            // 3 questões de dezenas (do 20 ao 99)
-            const tensQuestions = allQuizData
-                .filter(q => q.category === "dezenas");
+            // 12 questões de dezenas (selecionar 12 aleatórias)
+            const tensQuestions = selectRandomQuestions(allQuizData.tens, 12);
             
-            // Selecionar 3 questões aleatórias das dezenas
-            const selectedTens = [];
-            while (selectedTens.length < 3 && tensQuestions.length > 0) {
-                const randomIndex = Math.floor(Math.random() * tensQuestions.length);
-                selectedTens.push(tensQuestions.splice(randomIndex, 1)[0]);
-            }
-            
-            // 2 questões de centenas (do 100 ao 999)
-            const hundredsQuestions = allQuizData
-                .filter(q => q.category === "centenas");
-            
-            // Selecionar 2 questões aleatórias das centenas
-            const selectedHundreds = [];
-            while (selectedHundreds.length < 2 && hundredsQuestions.length > 0) {
-                const randomIndex = Math.floor(Math.random() * hundredsQuestions.length);
-                selectedHundreds.push(hundredsQuestions.splice(randomIndex, 1)[0]);
-            }
+            // 3 questões de centenas (selecionar 3 aleatórias)
+            const hundredsQuestions = selectRandomQuestions(allQuizData.hundreds, 3);
             
             // Combinar todas as questões selecionadas
             const selectedQuestions = [
                 ...basicQuestions,
-                ...selectedTens,
-                ...selectedHundreds
+                ...tensQuestions,
+                ...hundredsQuestions
             ];
+            
+            console.log(`Total de questões selecionadas: ${selectedQuestions.length}`);
+            console.log(`Básicas: ${basicQuestions.length}, Dezenas: ${tensQuestions.length}, Centenas: ${hundredsQuestions.length}`);
             
             // Embaralhar a ordem final
             return shuffleArray(selectedQuestions);
+        }
+
+        // Função para selecionar questões aleatórias de um array
+        function selectRandomQuestions(questions, count) {
+            const shuffled = shuffleArray([...questions]);
+            return shuffled.slice(0, count);
         }
 
         // Estado do quiz
@@ -739,7 +733,12 @@
             // Verificar se há progresso salvo
             const savedProgress = localStorage.getItem('quizProgress');
             if (savedProgress) {
-                currentQuiz = JSON.parse(savedProgress);
+                const saved = JSON.parse(savedProgress);
+                // Verificar se o progresso salvo tem 36 questões
+                if (saved.quizData && saved.quizData.length === 36) {
+                    currentQuiz = saved;
+                    quizData = saved.quizData;
+                }
             }
 
             // Reproduzir vídeo e áudio de introdução
@@ -810,8 +809,10 @@
 
         // Funções do quiz
         function startQuiz(mode) {
-            // Selecionar as 36 questões
-            quizData = selectQuizQuestions();
+            // Selecionar as 36 questões apenas se não tiver progresso salvo
+            if (quizData.length !== 36) {
+                quizData = selectQuizQuestions();
+            }
             
             currentQuiz.mode = mode;
             currentQuiz.currentQuestion = 0;
@@ -1114,7 +1115,11 @@
         }
 
         function saveProgress() {
-            localStorage.setItem('quizProgress', JSON.stringify(currentQuiz));
+            const progressToSave = {
+                ...currentQuiz,
+                quizData: quizData
+            };
+            localStorage.setItem('quizProgress', JSON.stringify(progressToSave));
         }
     </script>
 </body>
